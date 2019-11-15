@@ -1,25 +1,33 @@
 var rgb = [];
-rgb[0] = [219, 43, 57];
-rgb[1] = [41, 51, 92];
-rgb[2] = [243, 167, 18];
-rgb[3] = [51, 24, 50];
-rgb[4] = [23, 190, 187];
-back = "rgb(198, 216, 211)";
+
+rgb[0] = [51, 55, 69];
+rgb[1] = [230, 52, 98];
+rgb[2] = [254, 95, 85];
+rgb[3] = [18, 78, 120];
+
+back = "rgb(238, 245, 219)";
+
+var rate = 0.1;
+var widt = 60;
+var mult = 6;
+
+var count = 0;
+var cycle = 0;
+var dir = 1;
+var lim = 70;
+var len = rgb.length;
+
+for(i=len;i<len*mult;i+=len) {
+	for(j=0;j<len;j++) rgb[i+j]=rgb[j];
+}
 
 var div = document.querySelector(".circle");
 var body = document.querySelector("body");
 body.style.background = back;
 
-var count = 0;
-var dir = 1;
-var mult = 0.2;
-var widt = 40;
-var lim = 70;
-var cycle = 0;
-
 setInterval(function () {
 
-	var pos = count * mult;
+	var pos = count * rate;
 	var shft = (0.5 - dir / 2) + dir * pos / (lim - widt);
 	var str = "radial-gradient(" + back + " " + pos + "%, ";
 	for (var i = 0; i < rgb.length; i++) {
@@ -42,10 +50,13 @@ setInterval(function () {
 	str += back + " " + (pos + widt) + "%)";
 
 	div.style.background = str;
+
 	count += dir;
-	if (count * mult <= 0 || count * mult >= lim - widt) {
+	if (count * rate <= 0 || count * rate >= lim - widt) {
 		dir *= -1;
+		count += 2*dir;
 		cycle++;
 	}
+
 	if (cycle === rgb.length) cycle = 0;
 }, 13);
