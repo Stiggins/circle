@@ -9,7 +9,7 @@ back = "rgb(238, 245, 219)";
 
 var rate = 0.1;
 var widt = 60;
-var mult = 6;
+var mult = 4;
 
 var count = 0;
 var cycle = 0;
@@ -17,8 +17,8 @@ var dir = 1;
 var lim = 70;
 var len = rgb.length;
 
-for(i=len;i<len*mult;i+=len) {
-	for(j=0;j<len;j++) rgb[i+j]=rgb[j];
+for (i = len; i < len * mult; i += len) {
+	for (j = 0; j < len; j++) rgb[i + j] = rgb[j];
 }
 
 var div = document.querySelector(".circle");
@@ -29,7 +29,8 @@ setInterval(function () {
 
 	var pos = count * rate;
 	var shft = (0.5 - dir / 2) + dir * pos / (lim - widt);
-	var str = "radial-gradient(" + back + " " + pos + "%, ";
+	var str = "radial-gradient(";
+
 	for (var i = 0; i < rgb.length; i++) {
 		var iCalc = i + cycle;
 		if (iCalc >= rgb.length) iCalc -= rgb.length;
@@ -44,7 +45,7 @@ setInterval(function () {
 			}
 		}
 		var color = "rgb(" + rgbCalc[0] + "," + rgbCalc[1] + "," + rgbCalc[2] + ")";
-		str += color + " " + (pos + widt * i / rgb.length) + "%, ";
+		if (i !== 0) str += color + " " + (pos + widt * i / rgb.length) + "%, ";
 		str += color + " " + (pos + widt * (i + 1) / rgb.length) + "%, ";
 	}
 	str += back + " " + (pos + widt) + "%)";
@@ -54,7 +55,7 @@ setInterval(function () {
 	count += dir;
 	if (count * rate <= 0 || count * rate >= lim - widt) {
 		dir *= -1;
-		count += 2*dir;
+		count += 2 * dir;
 		cycle++;
 	}
 
