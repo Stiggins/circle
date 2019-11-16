@@ -1,63 +1,81 @@
-var rgb = [];
 
-rgb[0] = [51, 55, 69];
-rgb[1] = [230, 52, 98];
-rgb[2] = [254, 95, 85];
-rgb[3] = [18, 78, 120];
+var colors = [];
 
-back = "rgb(238, 245, 219)";
 
-var rate = 0.1;
-var widt = 66;
-var mult = 8;
+colors[0] = [51, 55, 69];
+colors[1] = [230, 52, 98];
+colors[2] = [254, 95, 85];
+colors[3] = [18, 78, 120];
 
-var count = widt/rate;
-var cycle = 0;
-var dir = 1;
-var lim = 70;
-var len = rgb.length;
+var backgroundColor = "rgb(238, 245, 219)";
 
-for (i = len; i < len * mult; i += len) {
-	for (j = 0; j < len; j++) rgb[i + j] = rgb[j];
+var periodSize = 3000;
+var periodColor = 1500;
+var width = 66;
+var multiples = 8;
+
+
+var frameTime = 13;
+var cycleColor = 0;
+var directionSize = 1;
+var limitSize = 70;
+var colorsLength = colors.length;
+var limitColor = periodColor / (frameTime * colorsLength);
+var rateSize = (limitSize - width) * frameTime * 2 / periodSize;
+var countSize = width;
+var countColor = 0;
+var colorsLength = colors.length;
+
+for (i = colorsLength; i < colorsLength * multiples; i += colorsLength) {
+	for (j = 0; j < colorsLength; j++) colors[i + j] = colors[j];
 }
 
 var div = document.querySelector(".circle");
 var body = document.querySelector("body");
-body.style.background = back;
+body.style.background = backgroundColor;
 
 setInterval(function () {
 
-	var pos = count * rate;
-	var shft = (0.5 - dir / 2) + dir * (pos - widt) / (lim - widt);
-	var str = "radial-gradient(";
+	var shft = countColor / limitColor;
+	var gradientString = "radial-gradient(";
 
-	for (var i = 0; i < rgb.length; i++) {
-		var iCalc = i + cycle;
-		if (iCalc >= rgb.length) iCalc -= rgb.length;
+	for (var i = 0; i < colors.length; i++) {
+		var iCalc = i + cycleColor;
+		if (iCalc >= colors.length) iCalc -= colors.length;
 		rgbCalc = [];
-		if (iCalc + 1 < rgb.length) {
+		if (iCalc + 1 < colors.length) {
 			for (var j = 0; j < 3; j++) {
-				rgbCalc[j] = rgb[iCalc][j] + (rgb[iCalc + 1][j] - rgb[iCalc][j]) * shft;
+				rgbCalc[j] = colors[iCalc][j] + (colors[iCalc + 1][j] - colors[iCalc][j]) * shft;
 			}
 		} else {
 			for (var j = 0; j < 3; j++) {
-				rgbCalc[j] = rgb[iCalc][j] + (rgb[0][j] - rgb[iCalc][j]) * shft;
+				rgbCalc[j] = colors[iCalc][j] + (colors[0][j] - colors[iCalc][j]) * shft;
 			}
 		}
 		var color = "rgb(" + rgbCalc[0] + "," + rgbCalc[1] + "," + rgbCalc[2] + ")";
-		if (i !== 0) str += color + " " + (pos * i / rgb.length) + "%, ";
-		str += color + " " + (pos * (i + 1) / rgb.length) + "%, ";
+		if (i !== 0) gradientString += color + " " + (countSize * i / colors.length) + "%, ";
+		gradientString += color + " " + (countSize * (i + 1) / colors.length) + "%, ";
+
+		if (i===0) {
+			console.log(countColor);
+			console.log(gradientString);
+		}
 	}
-	str += back + " " + pos + "%)";
+	gradientString += backgroundColor + " " + countSize + "%)";
 
-	div.style.background = str;
+	div.style.background = gradientString;
 
-	count += dir;
-	if (count * rate <= widt || count * rate >= lim) {
-		dir *= -1;
-		count += 2 * dir;
-		cycle++;
+	countSize += directionSize * rateSize;
+	countColor += 1;
+	if (countSize <= width || countSize >= limitSize) {
+		directionSize *= -1;
+		countSize += 2 * directionSize * rateSize;
 	}
 
-	if (cycle === rgb.length) cycle = 0;
-}, 13);
+	if (countColor >= limitColor) {
+		countColor = 0;
+		cycleColor++;
+	}
+
+	if (cycleColor === colors.length) cycleColor = 0;
+}, frameTime);
