@@ -55,11 +55,6 @@ setInterval(function () {
 		var color = "rgb(" + rgbCalc[0] + "," + rgbCalc[1] + "," + rgbCalc[2] + ")";
 		if (i !== 0) gradientString += color + " " + (countSize * i / colors.length) + "%, ";
 		gradientString += color + " " + (countSize * (i + 1) / colors.length) + "%, ";
-
-		if (i===0) {
-			console.log(countColor);
-			console.log(gradientString);
-		}
 	}
 	gradientString += backgroundColor + " " + countSize + "%)";
 
